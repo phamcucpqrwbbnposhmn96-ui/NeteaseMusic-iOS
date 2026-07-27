@@ -1,0 +1,10 @@
+.DS_Store
+build/
+*.xcarchive
+*.ipa
+*.app
+NeteaseMusic.xcodeproj/
+*.xcodeproj/
+xcuserdata/
+DerivedData/
+.swiftpm/

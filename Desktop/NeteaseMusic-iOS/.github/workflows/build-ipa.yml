@@ -1,0 +1,61 @@
+name: Build IPA
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate Xcode Project
+        run: xcodegen generate
+
+      - name: Build Archive
+        env:
+          CI: "true"
+        run: |
+          xcodebuild archive \
+            -project NeteaseMusic.xcodeproj \
+            -scheme NeteaseMusic \
+            -archivePath build/NeteaseMusic.xcarchive \
+            -destination 'generic/platform=iOS' \
+            CODE_SIGN_IDENTITY="" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO
+
+      # 注意：要导出可安装的 IPA，需要配置签名证书和 provisioning profile
+      # 以下步骤为示例，需要你先在 GitHub Secrets 里设置证书
+      # - name: Import Certificates
+      #   uses: apple-actions/import-codesign-certs@v2
+      #   with:
+      #     p12-file-base64: ${{ secrets.CERTIFICATES_P12 }}
+      #     p12-password: ${{ secrets.CERTIFICATES_P12_PASSWORD }}
+      #
+      # - name: Download Provisioning Profile
+      #   uses: apple-actions/download-provisioning-profiles@v1
+      #   with:
+      #     bundle-id: com.yourname.neteasemusic
+      #     issuer-id: ${{ secrets.APPSTORE_ISSUER_ID }}
+      #     api-key-id: ${{ secrets.APPSTORE_KEY_ID }}
+      #     api-private-key: ${{ secrets.APPSTORE_PRIVATE_KEY }}
+      #
+      # - name: Export IPA
+      #   run: |
+      #     xcodebuild -exportArchive \
+      #       -archivePath build/NeteaseMusic.xcarchive \
+      #       -exportOptionsPlist ExportOptions.plist \
+      #       -exportPath build/ipa
+
+      - name: Upload Archive
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeteaseMusic-archive
+          path: build/NeteaseMusic.xcarchive
