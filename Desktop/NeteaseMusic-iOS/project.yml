@@ -3,7 +3,7 @@ targets:
   NeteaseMusic:
     type: application
     platform: iOS
-    deploymentTarget: "16.0"
+    deploymentTarget: "17.0"
     sources:
       - path: Sources
       - path: Resources
@@ -22,8 +22,7 @@ targets:
         CFBundleDisplayName: 云音
         CFBundleShortVersionString: 1.0.0
         CFBundleVersion: 1
-        UILaunchStoryboardName: LaunchScreen
-        UIRequiredDeviceCapabilities: [armv7]
+        UIRequiredDeviceCapabilities: [arm64]
         UISupportedInterfaceOrientations:
           - UIInterfaceOrientationPortrait
         UIBackgroundModes:
