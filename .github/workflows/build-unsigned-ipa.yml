@@ -19,23 +19,25 @@ jobs:
         working-directory: Desktop/NeteaseMusic-iOS
         run: xcodegen generate
 
-      - name: Build Unsigned Archive
+      - name: Build Unsigned App
         working-directory: Desktop/NeteaseMusic-iOS
         run: |
-          xcodebuild archive \
+          xcodebuild build \
             -project NeteaseMusic.xcodeproj \
             -scheme NeteaseMusic \
             -sdk iphoneos \
             -configuration Release \
-            -archivePath build/NeteaseMusic.xcarchive \
+            -derivedDataPath build/DerivedData \
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
-            CODE_SIGNING_ALLOWED=NO
+            CODE_SIGNING_ALLOWED=NO \
+            DEVELOPMENT_TEAM="" \
+            PROVISIONING_PROFILE_SPECIFIER=""
 
       - name: Package Unsigned IPA
         working-directory: Desktop/NeteaseMusic-iOS
         run: |
-          APP_PATH="build/NeteaseMusic.xcarchive/Products/Applications/NeteaseMusic.app"
+          APP_PATH="build/DerivedData/Build/Products/Release-iphoneos/NeteaseMusic.app"
           mkdir -p Payload
           cp -R "$APP_PATH" Payload/
           zip -r build/NeteaseMusic-unsigned.ipa Payload
