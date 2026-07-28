@@ -22,6 +22,7 @@ jobs:
       - name: Build Unsigned App
         working-directory: Desktop/NeteaseMusic-iOS
         run: |
+          set -o pipefail
           xcodebuild build \
             -project NeteaseMusic.xcodeproj \
             -scheme NeteaseMusic \
@@ -31,8 +32,23 @@ jobs:
             CODE_SIGN_IDENTITY="" \
             CODE_SIGNING_REQUIRED=NO \
             CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGN_STYLE=Manual \
             DEVELOPMENT_TEAM="" \
-            PROVISIONING_PROFILE_SPECIFIER=""
+            PROVISIONING_PROFILE_SPECIFIER="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=YES \
+            ONLY_ACTIVE_ARCH=NO \
+            2>&1 | tee build.log
+          echo ""
+          echo "===== BUILD RESULT ====="
+          if grep -q "BUILD SUCCEEDED" build.log; then
+            echo "BUILD SUCCEEDED"
+          else
+            echo "BUILD FAILED"
+            echo ""
+            echo "===== ERROR SUMMARY ====="
+            grep -E "^[^/]*error:" build.log | head -20 || true
+            exit 1
+          fi
 
       - name: Package Unsigned IPA
         working-directory: Desktop/NeteaseMusic-iOS
