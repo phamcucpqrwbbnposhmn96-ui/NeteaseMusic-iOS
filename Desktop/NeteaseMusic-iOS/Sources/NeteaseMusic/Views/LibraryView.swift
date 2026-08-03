@@ -32,7 +32,9 @@ struct LibraryView: View {
                             ForEach(likedSongs.prefix(20)) { song in
                                 SongRowView(song: song)
                                     .onTapGesture {
-                                        PlayerManager.shared.playQueue(likedSongs, startingAt: likedSongs.firstIndex(where: { $0.id == song.id }) ?? 0)
+                                        if let index = likedSongs.firstIndex(where: { $0.id == song.id }) {
+                                            PlayerManager.shared.playQueue(likedSongs, startingAt: index)
+                                        }
                                     }
                             }
                         }
