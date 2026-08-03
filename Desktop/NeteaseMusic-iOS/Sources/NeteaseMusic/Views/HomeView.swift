@@ -18,12 +18,10 @@ struct HomeView: View {
                     if !recommendSongs.isEmpty {
                         sectionTitle("每日推荐")
                         LazyVStack(spacing: 8) {
-                            ForEach(recommendSongs.prefix(10)) { song in
+                            ForEach(Array(recommendSongs.prefix(10).enumerated()), id: \element.id) { index, song in
                                 SongRowView(song: song, showMenu: false)
                                     .onTapGesture {
-                                        if let index = recommendSongs.firstIndex(where: { $0.id == song.id }) {
-                                            PlayerManager.shared.playQueue(recommendSongs, startingAt: index)
-                                        }
+                                        PlayerManager.shared.playQueue(recommendSongs, startingAt: index)
                                     }
                             }
                         }
@@ -78,7 +76,7 @@ struct SongCarousel: View {
     var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 16) {
-                ForEach(songs) { song in
+                ForEach(Array(songs.enumerated()), id: \element.id) { index, song in
                     VStack(alignment: .leading, spacing: 8) {
                         CoverImage(url: song.highQualityCoverURL, size: 140)
                         Text(song.name)
@@ -91,7 +89,7 @@ struct SongCarousel: View {
                     }
                     .frame(width: 140)
                     .onTapGesture {
-                        PlayerManager.shared.playQueue(songs, startingAt: songs.firstIndex(where: { $0.id == song.id }) ?? 0)
+                        PlayerManager.shared.playQueue(songs, startingAt: index)
                     }
                 }
             }
