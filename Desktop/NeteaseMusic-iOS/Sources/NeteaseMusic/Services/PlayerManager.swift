@@ -71,7 +71,7 @@ final class PlayerManager: ObservableObject {
     private func loadAndPlay(song: Song) {
         Task {
             do {
-                guard let urlString = await NeteaseMusicService.shared.songURL(id: song.id),
+                guard let urlString = try await NeteaseMusicService.shared.songURL(id: song.id),
                       let url = URL(string: urlString) else {
                     print("无法获取歌曲播放地址")
                     return
