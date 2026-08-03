@@ -25,7 +25,9 @@ struct SearchView: View {
                             ForEach(songs) { song in
                                 SongRowView(song: song)
                                     .onTapGesture {
-                                        PlayerManager.shared.playQueue(songs, startingAt: songs.firstIndex(where: { $0.id == song.id }) ?? 0)
+                                        if let index = songs.firstIndex(where: { $0.id == song.id }) {
+                                            PlayerManager.shared.playQueue(songs, startingAt: index)
+                                        }
                                     }
                             }
                         }
