@@ -21,7 +21,9 @@ struct HomeView: View {
                             ForEach(recommendSongs.prefix(10)) { song in
                                 SongRowView(song: song, showMenu: false)
                                     .onTapGesture {
-                                        PlayerManager.shared.playQueue(recommendSongs, startingAt: recommendSongs.firstIndex(where: { $0.id == song.id }) ?? 0)
+                                        if let index = recommendSongs.firstIndex(where: { $0.id == song.id }) {
+                                            PlayerManager.shared.playQueue(recommendSongs, startingAt: index)
+                                        }
                                     }
                             }
                         }
