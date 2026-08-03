@@ -29,12 +29,10 @@ struct LibraryView: View {
                     if !likedSongs.isEmpty {
                         sectionTitle("我喜欢的音乐")
                         LazyVStack(spacing: 4) {
-                            ForEach(likedSongs.prefix(20)) { song in
+                            ForEach(Array(likedSongs.prefix(20).enumerated()), id: \element.id) { index, song in
                                 SongRowView(song: song)
                                     .onTapGesture {
-                                        if let index = likedSongs.firstIndex(where: { $0.id == song.id }) {
-                                            PlayerManager.shared.playQueue(likedSongs, startingAt: index)
-                                        }
+                                        PlayerManager.shared.playQueue(likedSongs, startingAt: index)
                                     }
                             }
                         }
