@@ -120,7 +120,7 @@ struct RadioView: View {
         Task {
             isLoading = true
             defer { isLoading = false }
-            fmSongs = try? await NeteaseMusicService.shared.personalFM()
+            fmSongs = (try? await NeteaseMusicService.shared.personalFM()) ?? []
         }
     }
 }
