@@ -22,12 +22,10 @@ struct SearchView: View {
                     LazyVStack(spacing: 0) {
                         if !songs.isEmpty {
                             sectionHeader("歌曲")
-                            ForEach(songs) { song in
+                            ForEach(Array(songs.enumerated()), id: \element.id) { index, song in
                                 SongRowView(song: song)
                                     .onTapGesture {
-                                        if let index = songs.firstIndex(where: { $0.id == song.id }) {
-                                            PlayerManager.shared.playQueue(songs, startingAt: index)
-                                        }
+                                        PlayerManager.shared.playQueue(songs, startingAt: index)
                                     }
                             }
                         }
